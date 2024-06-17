@@ -1,9 +1,11 @@
 package com.wms.controller;
 
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.wms.common.QueryPageParam;
+import com.wms.common.Result;
 import com.wms.entity.User;
 import com.wms.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,19 +65,54 @@ public class HelloController {
 
     @PostMapping("/listPage")
     public List<User> listPage(@RequestBody QueryPageParam queryPageParam){
-
         Page<User> page = new Page<>(queryPageParam.getPageNum(),queryPageParam.getPageSize());
         String name =(String) queryPageParam.getParam().get("name");
 
 
         LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.like(User::getName,name);
-
-        IPage<User> result = userService.page(page, queryWrapper);
+        System.out.println(queryWrapper.getSqlSelect());
+        IPage<User> result = userService.page(page,queryWrapper);
 
 
         return result.getRecords();
     }
+
+
+    //自定义Page查询
+    @PostMapping("/listPageC")
+    public List<User> listPageC(@RequestBody QueryPageParam queryPageParam){
+        Page<User> page = new Page<>(queryPageParam.getPageNum(),queryPageParam.getPageSize());
+        String name =(String) queryPageParam.getParam().get("name");
+
+
+        LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.like(User::getName,name);
+        System.out.println(queryWrapper.getSqlSelect());
+
+        IPage<User> result = userService.pageC(page);
+
+
+        return result.getRecords();
+    }
+
+    //自定义Wrapper
+    @PostMapping("/listPageW")
+    public Result listPageW(@RequestBody QueryPageParam queryPageParam){
+        Page<User> page = new Page<>(queryPageParam.getPageNum(),queryPageParam.getPageSize());
+        String name =(String) queryPageParam.getParam().get("name");
+        String id = (String) queryPageParam.getParam().get("id");
+
+
+        LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.like(User::getName,name);
+
+        IPage<User> result = userService.pageWW(page, queryWrapper);
+
+
+        return Result.success(result.getRecords(),result.getTotal());
+    }
+
 
     public UserService getUserService() {
         return userService;

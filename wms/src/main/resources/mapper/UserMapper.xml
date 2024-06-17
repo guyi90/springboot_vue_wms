@@ -4,4 +4,7 @@
     <select id="listAll" resultType="com.wms.entity.User">
         select * from user
     </select>
+    <select id="pageC" resultType="com.wms.entity.User">
+        select * from user
+    </select>
 </mapper>
