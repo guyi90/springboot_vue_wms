@@ -11,6 +11,15 @@ public class User {
     private int roleId;
     private String phone;
     private String isValid;
+    private int age;
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
 
     public Integer getId() {
         return id;
